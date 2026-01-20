@@ -1,5 +1,5 @@
 
-import { query, internalMutation } from "./_generated/server";
+import { query, mutation, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
 
@@ -60,5 +60,25 @@ export const logSignal = internalMutation({
                 relatedDecisionId: signalId // linking to signal as rough proxy
             });
         }
+    }
+});
+
+// Stub mutations for DecisionCard UI actions
+// These are placeholders since signals table doesn't have acknowledged/archived fields
+export const acknowledge = mutation({
+    args: { signalId: v.id("signals") },
+    handler: async (ctx, args) => {
+        // In future: Update signal with acknowledged: true, or insert into separate audit table
+        console.log("Signal acknowledged:", args.signalId);
+        return { success: true };
+    }
+});
+
+export const archive = mutation({
+    args: { signalId: v.id("signals") },
+    handler: async (ctx, args) => {
+        // In future: Update signal with archived: true, or move to archive table
+        console.log("Signal archived:", args.signalId);
+        return { success: true };
     }
 });
