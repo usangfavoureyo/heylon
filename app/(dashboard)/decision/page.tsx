@@ -42,6 +42,21 @@ export default function DecisionPage() {
     const explanation = decisionDoc?.jury?.explanation || decisionDoc?.analysis;
     const timestamp = decisionDoc?.updatedAt || Date.now();
 
+    // Mapping Status
+    const rawStage = decisionDoc?.stage || "IDLE";
+    let mappedStatus: "ACTIVE" | "ACKNOWLEDGED" | "ARCHIVED" = "ACTIVE";
+    if (rawStage === "FINAL") mappedStatus = "ARCHIVED";
+
+    // Mapping Tap/Mss
+    const mapSignal = (doc: any) => {
+        if (!doc) return null;
+        return {
+            ...doc,
+            timestamp: doc.createdAt || doc._creationTime || Date.now(),
+            id: doc._id
+        };
+    };
+
     return (
         <main className="flex flex-col gap-6 lg:gap-8 p-4 lg:p-8 pt-[80px] lg:pt-8 w-full">
             {/* ROW 1: PRIMARY DECISION + STRUCTURE (Desktop: 2:1 Split) */}
@@ -50,21 +65,21 @@ export default function DecisionPage() {
                     <DecisionCard
                         symbol={activeSymbol}
                         verdict={decisionDoc?.decision as any}
-                        bias={decisionDoc?.trigger?.type === "TAP" ? "LONG" : undefined}
+                        bias={decisionDoc?.trigger?.type === "TAP" ? "BULLISH" : undefined}
                         confidence={confidence}
                         executability={executability}
                         timestamp={timestamp}
                         explanation={decisionDoc?.analysis}
                         signalId={decisionDoc?.trigger?.eventId}
-                        status={decisionDoc?.stage || "ACTIVE"} // Use stage for status
+                        status={mappedStatus}
                         viability_label={undefined}
                         viability_score={decisionDoc?.viability_score}
                     />
                 </div>
                 <div className="h-full">
                     <TapMssCard
-                        tap={state.latestTap}
-                        mss={state.latestMss}
+                        tap={mapSignal(state.latestTap)}
+                        mss={mapSignal(state.latestMss)}
                     />
                 </div>
             </div>
@@ -73,7 +88,7 @@ export default function DecisionPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 min-h-0 lg:min-h-[250px] items-start">
                 <FactorsCard supports={supports} blockers={blockers} />
                 <ContextCard
-                    direction={state.latestTap?.metadata?.direction || "NEUTRAL"}
+                    direction={"NEUTRAL"}
                     volatility="NORMAL"
                     session="RTH"
                     macroRisk={isMacroBlocked ? "HIGH" : "LOW"}
@@ -100,9 +115,9 @@ function DecisionPageSkeleton() {
                 <Skeleton className="h-[300px] rounded-3xl bg-white/5" />
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <Skeleton className="h-[200px] rounded-3xl bg-white/5" />
-                <Skeleton className="h-[200px] rounded-3xl bg-white/5" />
-                <Skeleton className="h-[200px] rounded-3xl bg-white/5" />
+                <Skeleton className="h-[200px] rounded-3xl bg-white/3" />
+                <Skeleton className="h-[200px] rounded-3xl bg-white/3" />
+                <Skeleton className="h-[200px] rounded-3xl bg-white/3" />
             </div>
         </main>
     );
