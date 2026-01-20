@@ -6,7 +6,7 @@ import { api } from "@/convex/_generated/api";
 import { OpenAILogo, GeminiLogo, PerplexityLogo } from '../icons/LLMIcons';
 import {
     ToggleRight, ToggleLeft, Activity, Brain, Clock,
-    Newspaper, SlidersHorizontal, Settings, ShieldAlert, Zap, Stack
+    Newspaper, SlidersHorizontal, Settings, ShieldAlert, Zap, Layers
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
