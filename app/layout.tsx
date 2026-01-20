@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import ConvexClientProvider from "./ConvexClientProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ThemeSync } from "@/components/providers/ThemeSync";
 // import AppShell from "@/components/AppShell"; // Moved to (dashboard)
 
 const inter = Inter({ subsets: ["latin"] });
@@ -23,15 +24,16 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en" className="dark" suppressHydrationWarning>
+        <html lang="en" suppressHydrationWarning>
             <body className={`${inter.className} bg-background text-foreground antialiased`} suppressHydrationWarning={true}>
                 <ConvexClientProvider>
                     <ThemeProvider
                         attribute="class"
-                        defaultTheme="system"
+                        defaultTheme="dark"
                         enableSystem
                         disableTransitionOnChange
                     >
+                        <ThemeSync />
                         {children}
                     </ThemeProvider>
                 </ConvexClientProvider>
