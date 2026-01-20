@@ -97,7 +97,7 @@ export function SettingsUI() {
 
     const tabs = [
         { id: 'system', label: 'System', icon: ShieldAlert },
-        { id: 'layers', label: 'Layers', icon: Stack },
+        { id: 'layers', label: 'Layers', icon: Layers },
         { id: 'jury', label: 'Jury', icon: Brain },
         { id: 'notifications', label: 'Alerts', icon: Zap },
     ];
