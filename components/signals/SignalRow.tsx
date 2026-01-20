@@ -9,18 +9,18 @@ import { Doc } from "@/convex/_generated/dataModel";
 interface SignalRowProps {
     signal: Doc<"signals">;
     onClick: () => void;
-    nextSignalInChain?: Doc<"signals">; // For connector line logic if needed (simplified for now)
+    nextSignalInChain?: Doc<"signals">;
 }
 
 export function SignalRow({ signal, onClick }: SignalRowProps) {
-    // 1. Indentation & Hierarchy Level
+    // 1. Indentation & Hierarchy Level based on valid signal types
     const level = useMemo(() => {
         switch (signal.type) {
             case "TAP": return 0;
             case "MSS": return 1;
-            case "DECISION": return 2;
-            case "VETO": return 1;
-            case "EXPIRED": return 0;
+            case "SETUP": return 2;
+            case "ZONE_CREATED": return 0;
+            case "ZONE_BROKEN": return 0;
             default: return 0;
         }
     }, [signal.type]);
@@ -28,31 +28,22 @@ export function SignalRow({ signal, onClick }: SignalRowProps) {
     // 2. Color Semantics (Dot Only)
     const dotColor = useMemo(() => {
         if (signal.type === "TAP") return "bg-amber-500";
-        if (signal.type === "MSS") return "bg-emerald-500"; // Assuming MSS is usually bullish/bearish confirmation step
-
-        if (signal.type === "DECISION") {
-            if (signal.decision === "CONFIRM_LONG") return "bg-emerald-500";
-            if (signal.decision === "CONFIRM_SHORT") return "bg-red-500";
-            if (signal.decision === "BIAS") return "bg-amber-500";
-            return "bg-neutral-500"; // WAIT
-        }
-
-        if (signal.type === "VETO") return "bg-red-500";
+        if (signal.type === "MSS") return "bg-emerald-500";
+        if (signal.type === "SETUP") return "bg-blue-500";
+        if (signal.type === "ZONE_CREATED") return "bg-amber-500";
+        if (signal.type === "ZONE_BROKEN") return "bg-red-500";
         return "bg-neutral-500";
-    }, [signal.type, signal.decision]);
+    }, [signal.type]);
 
     // 3. Title Logic
     const title = useMemo(() => {
-        if (signal.type === "TAP") return "Demand Zone Tapped"; // Dynamic based on zoneType?
+        if (signal.type === "TAP") return "Zone Tapped";
         if (signal.type === "MSS") return "MSS Confirmed";
-        if (signal.type === "DECISION") {
-            if (signal.decision === "CONFIRM_LONG") return "Decision Confirmed: LONG";
-            if (signal.decision === "CONFIRM_SHORT") return "Decision Confirmed: SHORT";
-            if (signal.decision === "WAIT") return "System Wait";
-            return "Bias Updated";
-        }
+        if (signal.type === "SETUP") return "Setup Detected";
+        if (signal.type === "ZONE_CREATED") return "Zone Created";
+        if (signal.type === "ZONE_BROKEN") return "Zone Broken";
         return signal.type;
-    }, [signal]);
+    }, [signal.type]);
 
     const indentationClass = useMemo(() => {
         if (level === 1) return "pl-8";
@@ -77,7 +68,6 @@ export function SignalRow({ signal, onClick }: SignalRowProps) {
                 <div className="absolute left-[19px] top-1/2 w-3 h-px bg-neutral-800" />
             )}
 
-
             {/* Left Content */}
             <div className="flex items-center gap-3">
                 {/* Semantic Dot */}
@@ -89,7 +79,7 @@ export function SignalRow({ signal, onClick }: SignalRowProps) {
                         {title}
                     </span>
                     <span className="text-[11px] font-medium text-neutral-500 group-hover:text-neutral-400">
-                        {signal.symbol} • {signal.timeframe || "1H"} • {signal.stage === "PRELIMINARY" ? "Prelim" : "Final"}
+                        {signal.symbol} • {signal.timeframe || "1H"}
                     </span>
                 </div>
             </div>
