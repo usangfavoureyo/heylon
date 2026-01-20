@@ -17,6 +17,7 @@ const badgeVariants = cva(
                 // Helyon Custom Variants
                 "bias-buy": "border-blue-500/20 bg-blue-500/10 text-blue-500",
                 "bias-sell": "border-orange-500/20 bg-orange-500/10 text-orange-500",
+                "bias-neutral": "border-neutral-500/20 bg-neutral-500/10 text-neutral-500",
                 "success": "border-emerald-500/20 bg-emerald-500/10 text-emerald-500",
                 "warning": "border-yellow-500/20 bg-yellow-500/10 text-yellow-500",
                 "danger": "border-red-500/20 bg-red-500/10 text-red-500",
