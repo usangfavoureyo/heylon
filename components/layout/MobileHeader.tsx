@@ -6,7 +6,7 @@ import { StatusChip } from "@/components/ui/StatusChip";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import Link from "next/link";
-import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { SearchPage } from "@/components/search/SearchPage";
 
 import { useHaptic } from "@/hooks/use-haptic";
 import { useQuery } from "convex/react";
@@ -65,7 +65,7 @@ export function MobileHeader({ isVisible = true }: { isVisible?: boolean }) {
                 </div>
             </header>
 
-            <SearchOverlay open={showSearch} onOpenChange={setShowSearch} />
+            <SearchPage open={showSearch} onOpenChange={setShowSearch} />
         </>
     );
 }

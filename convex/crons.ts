@@ -29,4 +29,12 @@ crons.interval(
     {}
 );
 
+// 6. Market Data (Yahoo Finance) - Every 5 minutes during market hours
+crons.interval(
+    "fetch-market-data",
+    { minutes: 5 },
+    internal.actions.market.fetchMarketData,
+    {}
+);
+
 export default crons;

@@ -256,7 +256,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
                 {/* --- MOBILE BOTTOM NAV (Phosphor Icons) --- */}
                 <nav
                     className={cn(
-                        "fixed bottom-0 left-0 right-0 h-16 bg-card border-t border-neutral-800 lg:hidden flex items-center justify-around z-50 px-2 pb-safe transition-transform duration-300 ease-in-out",
+                        "fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-neutral-800 lg:hidden flex items-center justify-around z-50 px-2 pb-safe transition-transform duration-300 ease-in-out",
                         !isNavVisible && "translate-y-full"
                     )}
                 >
