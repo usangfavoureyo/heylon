@@ -4,23 +4,45 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "convex-dev": "npx convex dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "convex": "^1.31.5",
+    "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
+    "framer-motion": "^12.26.2",
+    "lucide-react": "^0.562.0",
     "next": "16.1.2",
+    "next-themes": "^0.4.6",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-device-detect": "^2.2.3",
+    "react-dom": "19.2.3",
+    "rss-parser": "^3.13.0",
+    "tailwind-merge": "^3.4.0",
+    "use-sound": "^5.0.0",
+    "vaul": "^1.1.2",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
+    "@ducanh2912/next-pwa": "^10.2.9",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/web-push": "^3.6.4",
+    "common-tags": "^1.8.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "workbox-build": "^7.4.0",
+    "workbox-webpack-plugin": "^7.4.0",
+    "workbox-window": "^7.4.0"
   }
 }

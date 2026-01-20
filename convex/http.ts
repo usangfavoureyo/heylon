@@ -35,7 +35,8 @@ http.route({
         }
 
         // 3. Persist to 'events_raw' (Immutable Log)
-        const rawId = await ctx.runMutation(internal.events.ingestRawEvent, {
+        // @ts-ignore
+        const rawId = await ctx.runMutation(internal.raw_events.ingestRawEvent, {
             source: "tradingview_pinescript",
             ticker: payload.ticker,
             payload: payload,
@@ -44,6 +45,7 @@ http.route({
 
         // 4. Trigger Normalization (Async)
         // We don't wait for this to respond to the webhook.
+        // @ts-ignore
         await ctx.runAction(internal.events.processEvent, {
             rawEventId: rawId,
         });
