@@ -4,7 +4,7 @@ import { Drawer } from "@/components/ui/drawer";
 import { Sheet } from "@/components/ui/Sheet";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
-import { Target, CheckCircle, XCircle } from "@phosphor-icons/react";
+import { Target } from "@phosphor-icons/react";
 import { Doc } from "@/convex/_generated/dataModel";
 import { useMediaQuery } from "@/hooks/use-media-query";
 
@@ -71,7 +71,7 @@ export function SignalDetail({ signal, open, onOpenChange }: SignalDetailProps) 
                 <div className="space-y-2">
                     <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest">Reasoning</h3>
                     <p className="text-sm text-neutral-300 leading-relaxed font-medium">
-                        {signal.summary}
+                        {signal.summary || "No summary available."}
                     </p>
                 </div>
 
@@ -94,22 +94,23 @@ export function SignalDetail({ signal, open, onOpenChange }: SignalDetailProps) 
                         </div>
                     </div>
                 </div>
-            </>
-            );
+            </div>
+        </>
+    );
 
-            if (isDesktop) {
+    if (isDesktop) {
         return (
             <Sheet open={open} onOpenChange={onOpenChange}>
                 <Content />
             </Sheet>
-            );
+        );
     }
 
-            return (
-            <Drawer open={open} onOpenChange={onOpenChange}>
-                <div className="flex flex-col h-[75vh] bg-neutral-900 rounded-t-[20px] overflow-hidden">
-                    <Content />
-                </div>
-            </Drawer>
-            );
+    return (
+        <Drawer open={open} onOpenChange={onOpenChange}>
+            <div className="flex flex-col h-[75vh] bg-neutral-900 rounded-t-[20px] overflow-hidden">
+                <Content />
+            </div>
+        </Drawer>
+    );
 }
