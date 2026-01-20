@@ -21,25 +21,26 @@ export default function DecisionPage() {
     }
 
     // Default Fallbacks
-    // state is the decision_state doc, so state.decision is the string field "BUY"|"SELL"|...
-    const verdict = state.decision || "WAIT";
+    // state is { decision: Doc, ... }
+    const decisionDoc = state.decision;
+    const verdict = decisionDoc?.decision || "WAIT";
+
     // confidence (number) to label
-    const confidenceScore = state.confidence || 0;
+    const confidenceScore = decisionDoc?.confidence || 0;
     const confidence = confidenceScore ? (confidenceScore > 0.8 ? "VERY_HIGH" : confidenceScore > 0.5 ? "HIGH" : "LOW") : "LOW";
 
     // Derive Executability
     let executability: "CONFIRMED" | "OPTIONAL" | "BLOCKED" = "OPTIONAL";
-    const blockers = state.blocking_factors || [];
+    const blockers = decisionDoc?.blocking_factors || [];
     if (blockers.length > 0) executability = "BLOCKED";
     if (verdict === "BUY" || verdict === "SELL") executability = "CONFIRMED";
 
-    const supports = state.supporting_factors || [];
-    // Macro risk logic derived from blockers
+    const supports = decisionDoc?.supporting_factors || [];
     const isMacroBlocked = blockers.includes("MACRO_RISK");
 
-    // Mapping fields correctly
-    const explanation = state.jury?.explanation || state.analysis;
-    const timestamp = state.updatedAt || Date.now();
+    // Mapping fields correctly using optional chaining on decisionDoc
+    const explanation = decisionDoc?.jury?.explanation || decisionDoc?.analysis;
+    const timestamp = decisionDoc?.updatedAt || Date.now();
 
     return (
         <main className="flex flex-col gap-6 lg:gap-8 p-4 lg:p-8 pt-[80px] lg:pt-8 w-full">
@@ -48,38 +49,22 @@ export default function DecisionPage() {
                 <div className="lg:col-span-2 h-full">
                     <DecisionCard
                         symbol={activeSymbol}
-                        verdict={state.decision as any}
-                        bias={state.trigger?.type === "TAP" ? "LONG" : undefined} // Infer bias? metadata missing on top level. 
-                        // Wait, Schema has 'trigger' object with 'type'. 'metadata' is on 'signals' table, not decision_state?
-                        // We will assume undefined bias unless we fetch context or it's implied.
+                        verdict={decisionDoc?.decision as any}
+                        bias={decisionDoc?.trigger?.type === "TAP" ? "LONG" : undefined}
                         confidence={confidence}
                         executability={executability}
                         timestamp={timestamp}
-                        explanation={state.analysis}
-                        signalId={state.trigger?.eventId}
-                        status={state.stage || "ACTIVE"} // Use stage for status
-                        viability_label={undefined} // Schema doesn't have label, ignoring
-                        viability_score={state.viability_score}
+                        explanation={decisionDoc?.analysis}
+                        signalId={decisionDoc?.trigger?.eventId}
+                        status={decisionDoc?.stage || "ACTIVE"} // Use stage for status
+                        viability_label={undefined}
+                        viability_score={decisionDoc?.viability_score}
                     />
                 </div>
                 <div className="h-full">
                     <TapMssCard
-                        // tap/mss data might need separate query if not in decision_state?
-                        // Schema DOES NOT have 'latestTap' or 'latestMss'.
-                        // Wait. The OLD code expected state.latestTap. 
-                        // Does API `getFullState` return a JOINED object?
-                        // If schema says defineTable... query might return return value of `getFullState` function.
-                        // I assumed `getFullState` returns EXACTLY the table schema.
-                        // If `getFullState` (the Query Function) returns a joined object { ...doc, latestTap: ..., latestMss: ... }, then Accessing .latestTap is VALID.
-                        // BUT accessing .decision.analysis was INVALID because `decision` is a string.
-                        // So `latestTap` might be valid if the Query adds it.
-                        // I will keep tap/mss props IF they exist on the helper type (which I can't see).
-                        // I will assume they are needed and keep them as state.latestTap if TS didn't complain about them previously.
-                        // The error was specifically about `state.decision.status`.
-                        // So I will assume `state` has hybrid shape: Doc Fields + Extra Fields (latestTap).
-
-                        tap={(state as any).latestTap}
-                        mss={(state as any).latestMss}
+                        tap={state.latestTap}
+                        mss={state.latestMss}
                     />
                 </div>
             </div>
@@ -88,7 +73,7 @@ export default function DecisionPage() {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 min-h-0 lg:min-h-[250px] items-start">
                 <FactorsCard supports={supports} blockers={blockers} />
                 <ContextCard
-                    direction={"NEUTRAL"} // state.latestTap?.metadata?.direction difficult to access if typed strictly
+                    direction={state.latestTap?.metadata?.direction || "NEUTRAL"}
                     volatility="NORMAL"
                     session="RTH"
                     macroRisk={isMacroBlocked ? "HIGH" : "LOW"}
