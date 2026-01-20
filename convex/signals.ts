@@ -66,19 +66,19 @@ export const logSignal = internalMutation({
 // Stub mutations for DecisionCard UI actions
 // These are placeholders since signals table doesn't have acknowledged/archived fields
 export const acknowledge = mutation({
-    args: { signalId: v.id("signals") },
+    args: { id: v.id("signals") },
     handler: async (ctx, args) => {
         // In future: Update signal with acknowledged: true, or insert into separate audit table
-        console.log("Signal acknowledged:", args.signalId);
+        console.log("Signal acknowledged:", args.id);
         return { success: true };
     }
 });
 
 export const archive = mutation({
-    args: { signalId: v.id("signals") },
+    args: { id: v.id("signals") },
     handler: async (ctx, args) => {
         // In future: Update signal with archived: true, or move to archive table
-        console.log("Signal archived:", args.signalId);
+        console.log("Signal archived:", args.id);
         return { success: true };
     }
 });
