@@ -14,7 +14,7 @@ export default function ConsensusSubPage() {
 
     if (!settings) return <LoadingScreen className="bg-white dark:bg-black" />;
 
-    const models = settings.consensus_models || {};
+    const models: Record<string, boolean> = settings.consensus_models || {};
     const toggleModel = (key: string) => updateSettings({ consensus_models: { ...models, [key]: !models[key] } });
 
     return (
