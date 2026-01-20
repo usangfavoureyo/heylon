@@ -18,8 +18,8 @@ export function LoadingScreen({ className }: { className?: string }) {
 
 export function PageLoading() {
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/80 dark:bg-black/80 backdrop-blur-sm">
-            <Loader2 className="w-10 h-10 text-neutral-900 dark:text-white animate-spin" strokeWidth={1} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black backdrop-blur-sm">
+            <Loader2 className="w-10 h-10 text-white animate-spin" strokeWidth={1} />
         </div>
     );
 }

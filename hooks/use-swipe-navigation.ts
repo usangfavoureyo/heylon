@@ -15,8 +15,8 @@ export function useSwipeNavigation() {
     const touchStart = useRef<number | null>(null);
     const touchEnd = useRef<number | null>(null);
 
-    // Min swipe distance required (px)
-    const minSwipeDistance = 50;
+    // Min swipe distance required (px) - higher = less sensitive
+    const minSwipeDistance = 100;
 
     const onTouchStart = (e: React.TouchEvent) => {
         touchEnd.current = null;
