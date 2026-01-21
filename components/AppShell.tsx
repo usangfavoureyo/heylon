@@ -17,6 +17,7 @@ import {
 } from "@phosphor-icons/react";
 
 import { MobileHeader } from "./layout/MobileHeader";
+import { Clock } from "./layout/Clock";
 import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
 import { SymbolProvider } from "./providers/SymbolProvider";
 import { StatusChip } from "./ui/StatusChip";
@@ -112,14 +113,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     // Swipe Navigation
     const swipeHandlers = useSwipeNavigation();
 
-    // Client-side only time rendering to avoid hydration mismatch
-    const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
-    useEffect(() => {
-        setCurrentTime(new Date());
-        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-        return () => clearInterval(timer);
-    }, []);
 
     // --- MAIN CONTENT AREA ---
     return (
@@ -204,97 +198,75 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
                         {/* Right Side: Time & Status */}
                         <div className="flex items-center gap-6">
-                            {/* Time Display */}
-                            <div className="flex flex-col items-end justify-center text-right min-w-[140px]">
-                                {currentTime ? (
-                                    <>
-                                        <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-0.5">
-                                            {currentTime.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-                                        </div>
-                                        <div className="flex items-center gap-3 justify-end">
-                                            <div className="text-sm font-medium text-foreground tabular-nums leading-none">
-                                                {currentTime.toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' })} <span className="text-xs text-muted-foreground">GMT{(() => {
-                                                    const offset = -currentTime.getTimezoneOffset() / 60;
-                                                    return offset >= 0 ? `+${offset}` : offset;
-                                                })()}</span>
-                                            </div>
-                                            <div className="h-3 w-px bg-border"></div>
-                                            <div className="text-sm font-medium text-foreground tabular-nums leading-none">
-                                                {currentTime.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit', minute: '2-digit' })} <span className="text-xs text-muted-foreground">EST</span>
-                                            </div>
-                                        </div>
-                                    </>
-                                ) : (
-                                    // Skeleton Loading State to prevent layout shift
-                                    <div className="h-8 w-32 bg-neutral-900/50 rounded animate-pulse" />
-                                )}
-                            </div>
-
-                            <StatusChip status="open" label="MARKET OPEN" showDot={true} className="hidden md:inline-flex" />
-
-                            <Link href="/notifications" className="relative w-9 h-9 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center cursor-pointer transition-colors text-emerald-500">
-                                <Bell className="w-4 h-4 font-bold" weight="bold" />
-                                {/* Single Amber Dot for Unread Notifications */}
-                                <UnreadIndicator />
-                            </Link>
+                            {/* Isolated Clock Component to prevent AppShell re-renders */}
+                            <Clock />
                         </div>
+
+                        <StatusChip status="open" label="MARKET OPEN" showDot={true} className="hidden md:inline-flex" />
+
+                        <Link href="/notifications" className="relative w-9 h-9 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center cursor-pointer transition-colors text-emerald-500">
+                            <Bell className="w-4 h-4 font-bold" weight="bold" />
+                            {/* Single Amber Dot for Unread Notifications */}
+                            <UnreadIndicator />
+                        </Link>
                     </div>
+            </div>
 
-                    {/* Mobile Header (Sticky Top) */}
-                    <MobileHeader isVisible={isNavVisible} />
+            {/* Mobile Header (Sticky Top) */}
+            <MobileHeader isVisible={isNavVisible} />
 
-                    {/* Scrollable Content with Swipe Detection */}
-                    <div
-                        ref={scrollContainerRef}
-                        className="flex-1 overflow-y-auto no-scrollbar relative w-full pt-[60px] lg:pt-0"
-                        {...swipeHandlers}
-                    >
-                        {children}
-                    </div>
-                </main>
+            {/* Scrollable Content with Swipe Detection */}
+            <div
+                ref={scrollContainerRef}
+                className="flex-1 overflow-y-auto no-scrollbar relative w-full pt-[60px] lg:pt-0"
+                {...swipeHandlers}
+            >
+                {children}
+            </div>
+        </main>
 
-                {/* --- MOBILE BOTTOM NAV (Phosphor Icons) --- */}
-                <nav
+                {/* --- MOBILE BOTTOM NAV (Phosphor Icons) --- */ }
+    <nav
+        className={cn(
+            "fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-neutral-800 lg:hidden flex items-center justify-around z-50 px-2 pb-safe transition-transform duration-300 ease-in-out",
+            !isNavVisible && "translate-y-full"
+        )}
+    >
+        {NAV_ITEMS.map((item) => {
+            const isActive = pathname === item.href;
+            const Icon = item.icon;
+
+            const handleNavClick = (e: React.MouseEvent) => {
+                trigger('light');
+                if (isActive && scrollContainerRef.current) {
+                    e.preventDefault();
+                    scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+
+            return (
+                <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={handleNavClick}
                     className={cn(
-                        "fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-neutral-800 lg:hidden flex items-center justify-around z-50 px-2 pb-safe transition-transform duration-300 ease-in-out",
-                        !isNavVisible && "translate-y-full"
+                        "flex flex-col items-center justify-center w-full h-full gap-1 transition-colors active:scale-95 duration-150",
+                        isActive ? "text-foreground" : "text-muted-foreground"
                     )}
                 >
-                    {NAV_ITEMS.map((item) => {
-                        const isActive = pathname === item.href;
-                        const Icon = item.icon;
-
-                        const handleNavClick = (e: React.MouseEvent) => {
-                            trigger('light');
-                            if (isActive && scrollContainerRef.current) {
-                                e.preventDefault();
-                                scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-                            }
-                        };
-
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                onClick={handleNavClick}
-                                className={cn(
-                                    "flex flex-col items-center justify-center w-full h-full gap-1 transition-colors active:scale-95 duration-150",
-                                    isActive ? "text-foreground" : "text-muted-foreground"
-                                )}
-                            >
-                                <Icon
-                                    weight={isActive ? "fill" : "regular"}
-                                    className={cn(
-                                        "w-6 h-6 transition-transform",
-                                        isActive ? "text-foreground scale-110" : ""
-                                    )}
-                                />
-                                {/* Label Removed per Phase 13 */}
-                            </Link>
-                        );
-                    })}
-                </nav>
-            </div>
-        </SymbolProvider>
+                    <Icon
+                        weight={isActive ? "fill" : "regular"}
+                        className={cn(
+                            "w-6 h-6 transition-transform",
+                            isActive ? "text-foreground scale-110" : ""
+                        )}
+                    />
+                    {/* Label Removed per Phase 13 */}
+                </Link>
+            );
+        })}
+    </nav>
+            </div >
+        </SymbolProvider >
     );
 }

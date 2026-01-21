@@ -24,16 +24,18 @@ export function SymbolProvider({ children }: { children: ReactNode }) {
     const activeSymbol = watchlist ? (watchlist as any).active_symbol : "NQ";
 
     // 3. Setter Wrapper
-    const handleSetActive = (symbol: FuturesSymbol) => {
+    const handleSetActive = React.useCallback((symbol: FuturesSymbol) => {
         setActiveMutation({ symbol });
-    };
+    }, [setActiveMutation]);
+
+    const value = React.useMemo(() => ({
+        activeSymbol,
+        setActiveSymbol: handleSetActive,
+        AUTHORIZED_SYMBOLS
+    }), [activeSymbol, handleSetActive]);
 
     return (
-        <SymbolContext.Provider value={{
-            activeSymbol,
-            setActiveSymbol: handleSetActive,
-            AUTHORIZED_SYMBOLS
-        }}>
+        <SymbolContext.Provider value={value}>
             {children}
         </SymbolContext.Provider>
     );
