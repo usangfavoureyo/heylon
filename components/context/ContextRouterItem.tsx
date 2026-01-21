@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { useHaptic } from "@/hooks/use-haptic";
 
 interface ContextRouterItemProps {
     href: string;
@@ -14,6 +15,7 @@ interface ContextRouterItemProps {
 }
 
 export function ContextRouterItem({ href, label, status, statusColor, description, updatedAt }: ContextRouterItemProps) {
+    const { trigger } = useHaptic();
 
     // Default color logic if not provided
     const getStatusColor = (s: string) => {
@@ -56,7 +58,7 @@ export function ContextRouterItem({ href, label, status, statusColor, descriptio
     };
 
     return (
-        <Link href={href}>
+        <Link href={href} onClick={() => trigger('light')}>
             <div className="group w-full flex items-center justify-between p-4 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-900/50 hover:bg-neutral-50 dark:hover:bg-[#0d0d0d] hover:border-neutral-300 dark:hover:border-[#252525] active:scale-[0.99] transition-all duration-200 rounded-xl mb-3 cursor-pointer shadow-sm dark:shadow-none">
                 {/* LEFT: Label & Description */}
                 <div className="flex flex-col gap-1">
@@ -88,3 +90,4 @@ export function ContextRouterItem({ href, label, status, statusColor, descriptio
         </Link>
     );
 }
+

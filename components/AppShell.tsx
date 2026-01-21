@@ -261,7 +261,10 @@ export default function AppShell({ children }: { children: ReactNode }) {
                     )}
                 >
                     {NAV_ITEMS.map((item) => {
-                        const isActive = pathname === item.href;
+                        // Handle Decision page: "/" nav item should be active when on "/decision"
+                        const isActive = item.href === "/"
+                            ? (pathname === "/" || pathname === "/decision")
+                            : pathname === item.href;
                         const Icon = item.icon;
 
                         const handleNavClick = (e: React.MouseEvent) => {
