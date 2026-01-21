@@ -4,7 +4,7 @@ import { StatusChip } from "@/components/ui/StatusChip";
 import { ConsensusCard } from "@/components/ConsensusCard";
 import { MarketFeed } from "@/components/MarketFeed";
 import { MetricCard } from "@/components/MetricCard";
-import { TrendingUp, TrendingDown, Zap, AlertTriangle } from "lucide-react";
+import { TrendingUp, Zap, AlertTriangle } from "lucide-react";
 
 import { useSymbol } from "@/components/providers/SymbolProvider";
 

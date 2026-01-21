@@ -12,7 +12,7 @@ import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useSymbol } from "@/components/providers/SymbolProvider";
 
-import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { SearchPage } from "@/components/search/SearchPage";
 
 
 const mockSession = {
@@ -96,7 +96,7 @@ export default function MarketPage() {
             </div>
 
             {/* Global Search Overlay (Controlled by Page State) */}
-            <SearchOverlay open={isSearchOpen} onOpenChange={setIsSearchOpen} />
+            <SearchPage open={isSearchOpen} onOpenChange={setIsSearchOpen} />
 
             {/* 4. Live Feed (Sticky Bottom) - Note: Might need adjustment if global scroll is used 
                 But User requested scroll-to-top which implies standard flow. 

@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useSymbol } from "../providers/SymbolProvider";
 import { MagnifyingGlass } from "@phosphor-icons/react";
-import { SearchOverlay } from "@/components/search/SearchOverlay";
+import { SearchPage } from "@/components/search/SearchPage";
 import { useState } from "react";
 import { useHaptic } from "@/hooks/use-haptic";
 
@@ -69,7 +69,7 @@ export function MarketHeader({ price = 0, change = 0, changePercent = 0, isOpen 
                 </div>
             </div>
 
-            <SearchOverlay open={searchOpen} onOpenChange={setSearchOpen} />
+            <SearchPage open={searchOpen} onOpenChange={setSearchOpen} />
         </>
     );
 }

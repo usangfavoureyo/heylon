@@ -17,7 +17,6 @@ import {
 } from "@phosphor-icons/react";
 
 import { MobileHeader } from "./layout/MobileHeader";
-import { Clock } from "./layout/Clock";
 import { useSwipeNavigation } from "@/hooks/use-swipe-navigation";
 import { SymbolProvider } from "./providers/SymbolProvider";
 import { StatusChip } from "./ui/StatusChip";
@@ -113,7 +112,14 @@ export default function AppShell({ children }: { children: ReactNode }) {
     // Swipe Navigation
     const swipeHandlers = useSwipeNavigation();
 
+    // Client-side only time rendering to avoid hydration mismatch
+    const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
+    useEffect(() => {
+        setCurrentTime(new Date());
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     // --- MAIN CONTENT AREA ---
     return (
@@ -198,19 +204,41 @@ export default function AppShell({ children }: { children: ReactNode }) {
 
                         {/* Right Side: Time & Status */}
                         <div className="flex items-center gap-6">
-                            {/* Isolated Clock Component to prevent AppShell re-renders */}
-                            <Clock />
+                            {/* Time Display */}
+                            <div className="flex flex-col items-end justify-center text-right min-w-[140px]">
+                                {currentTime ? (
+                                    <>
+                                        <div className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-0.5">
+                                            {currentTime.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                                        </div>
+                                        <div className="flex items-center gap-3 justify-end">
+                                            <div className="text-sm font-medium text-foreground tabular-nums leading-none">
+                                                {currentTime.toLocaleTimeString('en-GB', { hour12: false, hour: '2-digit', minute: '2-digit' })} <span className="text-xs text-muted-foreground">GMT{(() => {
+                                                    const offset = -currentTime.getTimezoneOffset() / 60;
+                                                    return offset >= 0 ? `+${offset}` : offset;
+                                                })()}</span>
+                                            </div>
+                                            <div className="h-3 w-px bg-border"></div>
+                                            <div className="text-sm font-medium text-foreground tabular-nums leading-none">
+                                                {currentTime.toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour12: false, hour: '2-digit', minute: '2-digit' })} <span className="text-xs text-muted-foreground">EST</span>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    // Skeleton Loading State to prevent layout shift
+                                    <div className="h-8 w-32 bg-neutral-900/50 rounded animate-pulse" />
+                                )}
+                            </div>
+
+                            <StatusChip status="open" label="MARKET OPEN" showDot={true} className="hidden md:inline-flex" />
+
+                            <Link href="/notifications" className="relative w-9 h-9 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center cursor-pointer transition-colors text-emerald-500">
+                                <Bell className="w-4 h-4 font-bold" weight="bold" />
+                                {/* Single Amber Dot for Unread Notifications */}
+                                <UnreadIndicator />
+                            </Link>
                         </div>
-
-                        <StatusChip status="open" label="MARKET OPEN" showDot={true} className="hidden md:inline-flex" />
-
-                        <Link href="/notifications" className="relative w-9 h-9 rounded-full bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 flex items-center justify-center cursor-pointer transition-colors text-emerald-500">
-                            <Bell className="w-4 h-4 font-bold" weight="bold" />
-                            {/* Single Amber Dot for Unread Notifications */}
-                            <UnreadIndicator />
-                        </Link>
                     </div>
-
 
                     {/* Mobile Header (Sticky Top) */}
                     <MobileHeader isVisible={isNavVisible} />
@@ -266,7 +294,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
                         );
                     })}
                 </nav>
-            </div >
-        </SymbolProvider >
+            </div>
+        </SymbolProvider>
     );
 }

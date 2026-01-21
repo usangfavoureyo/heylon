@@ -13,7 +13,7 @@ import { api } from "@/convex/_generated/api";
  * updates the theme whenever the Convex setting changes.
  */
 export function ThemeSync() {
-    const { theme, setTheme } = useTheme();
+    const { setTheme } = useTheme();
     const settings = useQuery(api.settings.getSettings);
 
     useEffect(() => {
@@ -27,12 +27,7 @@ export function ThemeSync() {
         };
 
         const mappedTheme = themeMap[settings.appearance] || "dark";
-
-        // Prevent redundant updates
-        if (theme !== mappedTheme) {
-            setTheme(mappedTheme);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setTheme(mappedTheme);
     }, [settings?.appearance, setTheme]);
 
     // This component doesn't render anything - it's just for syncing
