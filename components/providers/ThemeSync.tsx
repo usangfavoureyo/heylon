@@ -32,7 +32,8 @@ export function ThemeSync() {
         if (theme !== mappedTheme) {
             setTheme(mappedTheme);
         }
-    }, [settings?.appearance, setTheme, theme]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [settings?.appearance, setTheme]);
 
     // This component doesn't render anything - it's just for syncing
     return null;
