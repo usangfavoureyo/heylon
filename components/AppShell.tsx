@@ -23,7 +23,7 @@ import { StatusChip } from "./ui/StatusChip";
 import { DesktopSearch } from "./search/DesktopSearch";
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-import { AppearanceSync } from "./providers/AppearanceSync";
+
 import { useTheme } from "next-themes";
 
 // --- SIDEBAR ITEM COMPONENT ---
@@ -124,7 +124,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     // --- MAIN CONTENT AREA ---
     return (
         <SymbolProvider>
-            <AppearanceSync />
+
             <div className="flex h-screen w-full bg-background text-foreground font-sans overflow-hidden">
                 {/* --- DESKTOP SIDEBAR (Legacy UI) --- */}
                 <aside
