@@ -210,62 +210,62 @@ export default function AppShell({ children }: { children: ReactNode }) {
                             <UnreadIndicator />
                         </Link>
                     </div>
-            </div>
 
-            {/* Mobile Header (Sticky Top) */}
-            <MobileHeader isVisible={isNavVisible} />
 
-            {/* Scrollable Content with Swipe Detection */}
-            <div
-                ref={scrollContainerRef}
-                className="flex-1 overflow-y-auto no-scrollbar relative w-full pt-[60px] lg:pt-0"
-                {...swipeHandlers}
-            >
-                {children}
-            </div>
-        </main>
+                    {/* Mobile Header (Sticky Top) */}
+                    <MobileHeader isVisible={isNavVisible} />
 
-                {/* --- MOBILE BOTTOM NAV (Phosphor Icons) --- */ }
-    <nav
-        className={cn(
-            "fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-neutral-800 lg:hidden flex items-center justify-around z-50 px-2 pb-safe transition-transform duration-300 ease-in-out",
-            !isNavVisible && "translate-y-full"
-        )}
-    >
-        {NAV_ITEMS.map((item) => {
-            const isActive = pathname === item.href;
-            const Icon = item.icon;
+                    {/* Scrollable Content with Swipe Detection */}
+                    <div
+                        ref={scrollContainerRef}
+                        className="flex-1 overflow-y-auto no-scrollbar relative w-full pt-[60px] lg:pt-0"
+                        {...swipeHandlers}
+                    >
+                        {children}
+                    </div>
+                </main>
 
-            const handleNavClick = (e: React.MouseEvent) => {
-                trigger('light');
-                if (isActive && scrollContainerRef.current) {
-                    e.preventDefault();
-                    scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-            };
-
-            return (
-                <Link
-                    key={item.href}
-                    href={item.href}
-                    onClick={handleNavClick}
+                {/* --- MOBILE BOTTOM NAV (Phosphor Icons) --- */}
+                <nav
                     className={cn(
-                        "flex flex-col items-center justify-center w-full h-full gap-1 transition-colors active:scale-95 duration-150",
-                        isActive ? "text-foreground" : "text-muted-foreground"
+                        "fixed bottom-0 left-0 right-0 h-16 bg-black border-t border-neutral-800 lg:hidden flex items-center justify-around z-50 px-2 pb-safe transition-transform duration-300 ease-in-out",
+                        !isNavVisible && "translate-y-full"
                     )}
                 >
-                    <Icon
-                        weight={isActive ? "fill" : "regular"}
-                        className={cn(
-                            "w-6 h-6 transition-transform",
-                            isActive ? "text-foreground scale-110" : ""
-                        )}
-                    />
-                    {/* Label Removed per Phase 13 */}
-                </Link>
-            );
-        })}
-    </nav>
+                    {NAV_ITEMS.map((item) => {
+                        const isActive = pathname === item.href;
+                        const Icon = item.icon;
+
+                        const handleNavClick = (e: React.MouseEvent) => {
+                            trigger('light');
+                            if (isActive && scrollContainerRef.current) {
+                                e.preventDefault();
+                                scrollContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+                            }
+                        };
+
+                        return (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={handleNavClick}
+                                className={cn(
+                                    "flex flex-col items-center justify-center w-full h-full gap-1 transition-colors active:scale-95 duration-150",
+                                    isActive ? "text-foreground" : "text-muted-foreground"
+                                )}
+                            >
+                                <Icon
+                                    weight={isActive ? "fill" : "regular"}
+                                    className={cn(
+                                        "w-6 h-6 transition-transform",
+                                        isActive ? "text-foreground scale-110" : ""
+                                    )}
+                                />
+                                {/* Label Removed per Phase 13 */}
+                            </Link>
+                        );
+                    })}
+                </nav>
             </div >
         </SymbolProvider >
     );
