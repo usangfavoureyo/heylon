@@ -148,6 +148,22 @@ export const updateSettings = mutation({
     handler: async (ctx, args) => {
         const existing = await ctx.db.query("system_settings").first();
 
+        // Sections that require deep merging (to prevent overwriting with partial updates)
+        const DEEP_MERGE_KEYS = [
+            "interaction",
+            "trading",
+            "engine",
+            "zoning",
+            "risk",
+            "symbol",
+            "data",
+            "safety",
+            "notif_categories",
+            "layers_structural",
+            "layers_context",
+            "consensus_models"
+        ];
+
         // Prepare the updates from args
         const updates: any = {};
         for (const [key, value] of Object.entries(args)) {
@@ -157,31 +173,48 @@ export const updateSettings = mutation({
         const timestamp = Date.now();
 
         if (existing) {
-            // "Repair" Strategy: Ensure the final document has ALL default fields + existing data + updates.
-            // We use 'replace' to enforce structural integrity.
-            // We must exclude system fields (_id, _creationTime) from the new value.
             const { _id, _creationTime, ...currentData } = existing;
 
-            // Merge order: Defaults -> Existing (keep user data) -> Updates (new changes)
-            // Note: This cleanup ensures that if Schema requires fields missing in 'currentData', Defaults fill them.
-            // IF 'currentData' has extra fields not in schema, 'replace' will fail? 
-            // Ideally we only keep keys that match DEFAULT_SETTINGS or known schema. 
-            // For now, simple merge is likely sufficient unless 'currentData' has huge legacy garbage.
-
-            const newDoc = {
+            // Start with defaults + existing data
+            const newDoc: any = {
                 ...DEFAULT_SETTINGS,
                 ...currentData,
-                ...updates,
                 updatedAt: timestamp
             };
 
+            // Apply updates with Deep Merge for specific sections
+            for (const key of Object.keys(updates)) {
+                if (DEEP_MERGE_KEYS.includes(key) && typeof updates[key] === 'object' && updates[key] !== null) {
+                    // Deep Merge: (Default + Existing) + Update
+                    newDoc[key] = {
+                        ...(DEFAULT_SETTINGS as any)[key], // Ensure defaults exist
+                        ...(currentData as any)[key],      // Override with existing saved data
+                        ...updates[key]                    // Apply partial updates
+                    };
+                } else {
+                    // Simple replacement for primitives (appearance, booleans, etc.)
+                    newDoc[key] = updates[key];
+                }
+            }
+
             await ctx.db.replace(_id, newDoc);
         } else {
-            await ctx.db.insert("system_settings", {
-                ...DEFAULT_SETTINGS,
-                ...updates,
-                updatedAt: timestamp
-            });
+            // New Insert: Use Defaults + Updates
+            // We still need to careful with updates being partial
+            const newDoc: any = { ...DEFAULT_SETTINGS, updatedAt: timestamp };
+
+            for (const key of Object.keys(updates)) {
+                if (DEEP_MERGE_KEYS.includes(key) && typeof updates[key] === 'object' && updates[key] !== null) {
+                    newDoc[key] = {
+                        ...(DEFAULT_SETTINGS as any)[key],
+                        ...updates[key]
+                    };
+                } else {
+                    newDoc[key] = updates[key];
+                }
+            }
+
+            await ctx.db.insert("system_settings", newDoc);
         }
     }
 });
