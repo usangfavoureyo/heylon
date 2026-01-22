@@ -10,6 +10,7 @@ import {
     CaretRight
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { useHaptic } from "@/hooks/use-haptic";
 
 const SECTIONS = [
     { id: "preferences", label: "Preferences", icon: Gear, desc: "Appearance, Session & Engine" },
@@ -20,6 +21,8 @@ const SECTIONS = [
 ];
 
 export default function SystemPage() {
+    const { trigger } = useHaptic();
+
     return (
         <div className="flex flex-col min-h-full bg-white dark:bg-black text-neutral-900 dark:text-neutral-100 p-6 md:p-8 w-full">
             <div className="mb-8">
@@ -34,6 +37,7 @@ export default function SystemPage() {
                         <Link
                             key={section.id}
                             href={`/system/${section.id}`}
+                            onClick={() => trigger('light')}
                             className="bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl p-4 flex items-center justify-between hover:bg-neutral-50 dark:hover:bg-white/5 hover:border-neutral-300 dark:hover:border-neutral-700 transition-all active:scale-[0.99] group shadow-sm dark:shadow-none"
                         >
                             <div className="flex items-center gap-4">
@@ -53,3 +57,4 @@ export default function SystemPage() {
         </div>
     );
 }
+

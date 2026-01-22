@@ -27,7 +27,7 @@ export function MobileHeader({ isVisible = true }: { isVisible?: boolean }) {
             >
                 {/* Left: Brand */}
                 <div className="flex items-center">
-                    <div className="relative w-10 h-10 shrink-0">
+                    <div className="relative w-12 h-12 shrink-0">
                         <Image
                             src="/logo-white-v2.png" // TODO: Dark Mode Logo
                             alt="Heylon Logo"
@@ -47,19 +47,19 @@ export function MobileHeader({ isVisible = true }: { isVisible?: boolean }) {
                             trigger('light');
                             setShowSearch(true);
                         }}
-                        className="w-8 h-8 rounded-full bg-card border border-neutral-800 flex items-center justify-center active:scale-95 transition-transform text-muted-foreground hover:text-foreground"
+                        className="w-10 h-10 rounded-full bg-card border border-neutral-800 flex items-center justify-center active:scale-95 transition-transform text-muted-foreground hover:text-foreground"
                     >
-                        <MagnifyingGlass className="w-4 h-4" />
+                        <MagnifyingGlass className="w-5 h-5" />
                     </div>
 
                     <Link
                         href="/notifications"
                         onClick={() => trigger('light')}
-                        className="relative w-8 h-8 rounded-full bg-card border border-neutral-800 flex items-center justify-center active:scale-95 transition-transform"
+                        className="relative w-10 h-10 rounded-full bg-card border border-neutral-800 flex items-center justify-center active:scale-95 transition-transform"
                     >
-                        <Bell className="w-4 h-4 text-muted-foreground hover:text-foreground" />
+                        <Bell className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                         {unreadCount > 0 && (
-                            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-card" />
+                            <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border border-card" />
                         )}
                     </Link>
                 </div>

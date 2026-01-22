@@ -288,7 +288,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
                                 <Icon
                                     weight={isActive ? "fill" : "regular"}
                                     className={cn(
-                                        "w-6 h-6 transition-transform",
+                                        "w-7 h-7 transition-transform",
                                         isActive ? "text-foreground scale-110" : ""
                                     )}
                                 />
