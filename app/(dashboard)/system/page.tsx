@@ -26,7 +26,7 @@ export default function SystemPage() {
     return (
         <div className="flex flex-col min-h-full bg-white dark:bg-black text-neutral-900 dark:text-neutral-100 p-6 md:p-8 w-full">
             <div className="mb-8">
-                <h1 className="text-2xl font-light tracking-tight text-neutral-900 dark:text-white mb-2">System</h1>
+                <h1 className="text-2xl font-medium tracking-tight text-neutral-900 dark:text-white mb-2">System</h1>
                 <p className="text-sm text-neutral-500 font-medium">Control Surface</p>
             </div>
 
