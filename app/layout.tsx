@@ -5,6 +5,7 @@ import ConvexClientProvider from "./ConvexClientProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ThemeSync } from "@/components/providers/ThemeSync";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
                         disableTransitionOnChange
                     >
                         <ThemeSync />
+                        <ServiceWorkerRegistration />
                         <ErrorBoundary>
                             {children}
                         </ErrorBoundary>
