@@ -35,7 +35,7 @@ export function StatusChip({ status, label, showDot = true, className }: StatusC
 
     return (
         <div className={cn(
-            "inline-flex items-center gap-2 px-3 py-1 rounded-md border text-xs font-normal tracking-wide backdrop-blur-sm shadow-sm min-w-[80px]",
+            "inline-flex items-center gap-2 px-4 py-1.5 rounded-md border text-sm font-medium tracking-wide backdrop-blur-sm shadow-sm min-w-[90px]",
             !showDot && "justify-center text-center",
             style.bg,
             style.border,
@@ -43,12 +43,12 @@ export function StatusChip({ status, label, showDot = true, className }: StatusC
             className
         )}>
             {showDot && (
-                <div className="relative flex items-center justify-center w-2 h-2 shrink-0">
+                <div className="relative flex items-center justify-center w-2.5 h-2.5 shrink-0">
                     <span className={cn("animate-ping absolute inline-flex h-full w-full rounded-full opacity-75", style.color)}></span>
-                    <span className={cn("relative inline-flex rounded-full w-1.5 h-1.5", style.color)}></span>
+                    <span className={cn("relative inline-flex rounded-full w-2 h-2", style.color)}></span>
                 </div>
             )}
-            <span className="uppercase leading-none pt-[1px]">{displayText}</span>
+            <span className="uppercase leading-none">{displayText}</span>
         </div>
     );
 }
