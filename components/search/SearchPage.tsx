@@ -41,17 +41,17 @@ export function SearchPage({ open, onOpenChange }: SearchPageProps) {
         <div className="fixed inset-0 z-[100] bg-black flex flex-col">
             {/* Header with Close Button */}
             <div className="flex items-center justify-between p-4 border-b border-neutral-800 shrink-0">
+                <div className="w-10" /> {/* Spacer for centering */}
+                <h1 className="text-lg font-medium text-white">Search Symbol</h1>
                 <button
                     onClick={() => {
                         trigger('light');
                         onOpenChange(false);
                     }}
-                    className="p-2 -ml-2 text-neutral-400 hover:text-white transition-colors"
+                    className="p-2 -mr-2 text-neutral-400 hover:text-white transition-colors"
                 >
                     <X className="w-6 h-6" />
                 </button>
-                <h1 className="text-lg font-medium text-white">Search Symbol</h1>
-                <div className="w-10" /> {/* Spacer for centering */}
             </div>
 
             {/* Search Input */}
@@ -61,7 +61,7 @@ export function SearchPage({ open, onOpenChange }: SearchPageProps) {
                     <input
                         type="text"
                         placeholder="Search Symbol (e.g. ES, NQ)"
-                        className="w-full bg-neutral-900 text-white placeholder:text-neutral-500 rounded-xl py-4 pl-12 pr-4 text-lg font-medium focus:outline-none focus:ring-1 focus:ring-amber-500/50 border border-neutral-800"
+                        className="w-full bg-black text-white placeholder:text-neutral-500 rounded-xl py-4 pl-12 pr-4 text-lg font-medium focus:outline-none focus:ring-1 focus:ring-amber-500/50 border border-neutral-800"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         autoFocus
@@ -111,7 +111,7 @@ function SymbolRow({ symbol, isActive, isWatchlisted, onSelect, onToggleWatchlis
             onClick={onSelect}
             className={cn(
                 "relative w-full flex items-center justify-between p-4 rounded-xl transition-all overflow-hidden cursor-pointer active:bg-neutral-800",
-                isActive ? "bg-neutral-900 border border-neutral-700 text-white" : "bg-neutral-900/50 border border-neutral-800 text-neutral-400 hover:bg-neutral-800"
+                isActive ? "bg-black border border-neutral-700 text-white" : "bg-black border border-neutral-800 text-neutral-400 hover:bg-neutral-900"
             )}
         >
             <div className="flex items-center gap-3">
