@@ -1,14 +1,14 @@
-import withPWAInit from "@ducanh2912/next-pwa";
-
-const withPWA = withPWAInit({
-    dest: "public",
-    disable: process.env.NODE_ENV === "development",
-    register: true,
-    skipWaiting: true,
-    workboxOptions: {
-        importScripts: ["/custom-sw.js"],
-    },
-});
+// PWA config disabled due to broken workbox-webpack-plugin dependencies
+// import withPWAInit from "@ducanh2912/next-pwa";
+// const withPWA = withPWAInit({
+//     dest: "public",
+//     disable: process.env.NODE_ENV === "development",
+//     register: true,
+//     skipWaiting: true,
+//     workboxOptions: {
+//         importScripts: ["/custom-sw.js"],
+//     },
+// });
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -17,5 +17,6 @@ const nextConfig = {
     }
 };
 
-export default withPWA(nextConfig);
+export default nextConfig;
+
 
