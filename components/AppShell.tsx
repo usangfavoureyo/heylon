@@ -112,7 +112,15 @@ export default function AppShell({ children }: { children: ReactNode }) {
     // Swipe Navigation
     const swipeHandlers = useSwipeNavigation();
 
-    // (Removed unused currentTime timer that was causing unnecessary re-renders)
+    // Client-side time rendering (60s update to save battery on mobile)
+    const [currentTime, setCurrentTime] = useState<Date | null>(null);
+
+    useEffect(() => {
+        setCurrentTime(new Date());
+        // Update every 60 seconds instead of 1 second to reduce mobile overhead
+        const timer = setInterval(() => setCurrentTime(new Date()), 60000);
+        return () => clearInterval(timer);
+    }, []);
 
     // --- MAIN CONTENT AREA ---
     return (
