@@ -4,7 +4,7 @@ import "./globals.css";
 import ConvexClientProvider from "./ConvexClientProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ThemeSync } from "@/components/providers/ThemeSync";
-// import AppShell from "@/components/AppShell"; // Moved to (dashboard)
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,7 +34,9 @@ export default function RootLayout({
                         disableTransitionOnChange
                     >
                         <ThemeSync />
-                        {children}
+                        <ErrorBoundary>
+                            {children}
+                        </ErrorBoundary>
                     </ThemeProvider>
                 </ConvexClientProvider>
             </body>

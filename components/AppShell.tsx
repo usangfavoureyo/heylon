@@ -112,14 +112,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
     // Swipe Navigation
     const swipeHandlers = useSwipeNavigation();
 
-    // Client-side only time rendering to avoid hydration mismatch
-    const [currentTime, setCurrentTime] = useState<Date | null>(null);
-
-    useEffect(() => {
-        setCurrentTime(new Date());
-        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-        return () => clearInterval(timer);
-    }, []);
+    // (Removed unused currentTime timer that was causing unnecessary re-renders)
 
     // --- MAIN CONTENT AREA ---
     return (
