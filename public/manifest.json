@@ -2,7 +2,7 @@
     "name": "Heylon",
     "short_name": "Heylon",
     "description": "Structure-Gated Context-Aware Decision System",
-    "start_url": "/login",
+    "start_url": "/launch",
     "id": "/",
     "scope": "/",
     "display": "standalone",

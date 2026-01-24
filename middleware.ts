@@ -18,6 +18,11 @@ export function middleware(request: NextRequest) {
     const authToken = request.cookies.get('auth_token')?.value;
     const isAuthenticated = authToken === 'valid';
 
+    // 0. Allow Launch Page (PWA Entry Point)
+    if (pathname === '/launch') {
+        return NextResponse.next();
+    }
+
     // 2. Handle Login Page Access (Redirect to App if already logged in)
     if (pathname === '/login' || pathname === '/') {
         if (isAuthenticated) {
