@@ -3,11 +3,11 @@
     "short_name": "Heylon",
     "description": "Structure-Gated Context-Aware Decision System",
     "start_url": "/login",
+    "id": "/",
     "scope": "/",
     "display": "standalone",
     "background_color": "#000000",
     "theme_color": "#000000",
-    "orientation": "portrait",
     "icons": [
         {
             "src": "/icons/icon-192x192.png",

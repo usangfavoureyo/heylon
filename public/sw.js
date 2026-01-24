@@ -14,9 +14,10 @@ self.addEventListener('activate', function (event) {
 });
 
 // Fetch event - network first, no caching for simplicity
-self.addEventListener('fetch', function (event) {
-    event.respondWith(fetch(event.request));
-});
+// Fetch event - DISABLED to prevent freeze on launch
+// self.addEventListener('fetch', function (event) {
+//     event.respondWith(fetch(event.request));
+// });
 
 // Push notification handling
 self.addEventListener('push', function (event) {
